@@ -1,101 +1,104 @@
 
 
-module xcart_test(){
-  rod_dist = 45;
-  rod_d    = 8;
-  rod_l    = 8;
-  rod_wx   = 3;
-  rod_wy   = 4;
-
-  length = 40;
-
-
-  size = (rod_d+2*rod_wx)*I+
-         (rod_dist+rod_d+2*rod_wy)*J+
-         length*K;
-
-  %cblock(size,cy=1);
-  rods();
-
-  module rods(){
-    
-    r = rod_d/2;
-    h = rod_l;
-    d = rod_dist/2;
-    
-    
-    ty(+d)
-    cylinder(r=r,h=h);
-
-    ty(-d)
-    cylinder(r=r,h=h);
-  }
-
-         
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 module xcart(){
 
-  size = 64*I+81*J/2+7*K;
+  thickness      = 7;
+  gap            = 6;
+  cover          = 2;
+  nut_apothem = (116/100)*5.2/2;
+  nut_inner_d = (105/100)*2.7;   
+  nut_radius  = RadiusGivenApothem(nut_apothem,6);
+  bearing_diameter = 16;
+  bearing_radius   = bearing_diameter/2;
 
-  screw_hole_diameter = (115/100)*3*in/32 ;
-  screw_hole_diameter = (25/100)*3*in/32 ;
-
-  part();
-  mirror(J)
-  part();
-  module part(){
-    difference(){
-      cblock(size);
-      union(){
-
-        hole();
-        mirror(I)
-        hole();
-      }
+  difference(){
+    base_shape();
+    union(){
+      ty(+45/2) base_holes();
+      ty(-45/2) base_holes();
+      middle_holes();
+      belt_holes();
+      cutoff();
+      ty(+45/2) cutoff(50);
+      ty(-45/2) cutoff(50);
     }
   }
 
-  module hole(){
+  module base_holes(){
 
-    A = 31*I/2 + 47*J/2;
+    gx = cover+nut_radius;
+    gy = gap/2;
+    
+    m1 = +(14-gy)*J;
+    m2 = -(14-gy)*J;
+
+    d1 = m1+(54/2-gx)*I;
+    d2 = m2+(54/2-gx)*I;
+    d3 = -d2;
+    d4 = -d1;
+    d5 = (d1+m1)/2;
+    d6 = (d3+m1)/2;
+    d7 = (d2+m2)/2;
+    d8 = (d4+m2)/2;
+
+    translate(d1) c(inverted=1);
+    translate(d2) c(inverted=1);
+    translate(d3) c(inverted=1);
+    translate(d4) c(inverted=1);
+    translate(d5) c(inverted=1);
+    translate(d6) c(inverted=1);
+    translate(d7) c(inverted=1);
+    translate(d8) c(inverted=1);
 
 
-    translate(A+14*J)
-    cylinder(r=screw_hole_diameter/2,h=7,$fn=10);
-    translate(A-14*J)
-    cylinder(r=screw_hole_diameter/2,h=7,$fn=10);
+    
+  }
+  module c(h=thickness,inverted=0){
+    
+    head_d = 5;
+    head_h = 3;
+    body_d = nut_inner_d/2;
+    body_h = thickness-head_h;
 
-    r = 0.5;
-    translate(24*I)
-    cylinder(r=r,h=7,$fn=10);
+    if(inverted == 1){
+     screw("squared",[body_d,body_h,head_d,head_h],$fn=10); 
+    }
+    else{
+     screw("squared",[head_d,head_h,body_d,body_h],$fn=10); 
+    }
 
-    translate(-24*I)
-    cylinder(r=r,h=7,$fn=10);
+    
 
+    *cylinder(
+      r=nut_inner_d/2,
+      h=h,
+      center=true,$fn=100);
+  }
+  module base_shape(){
+    cblock(60*I+73*J+thickness*K,cy=1);
+    
+  }
+  module middle_holes(){
+
+    tx(+24) c();
+    tx(-24) c();
+    
+  }
+  module belt_holes(){
+
+    ty(+6) tx(+24) c(inverted=1);
+    ty(-6) tx(-24) c(inverted=1);
+    mirror(J){
+    ty(+6) tx(+24) c(inverted=1);
+    ty(-6) tx(-24) c(inverted=1);
+    }
+    
   }
 
-
-
-
+  module cutoff(x=30){
+    size = x*I+10*J+thickness*K;
+    cblock(size,cy=1);
+  }
 
 }
 
