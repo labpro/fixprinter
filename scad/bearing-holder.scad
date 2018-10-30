@@ -34,14 +34,21 @@ module bearing_holder(){
   holder();
 
   module holder(){
+    //color("yellow",0.15)
     difference(){
       union(){
-        shape(r=radius,n=6);
-        coverup();
-        coverdown();
+        n = 100;
+        shape(r=radius,n=n);
+        coverup(n=n);
+        coverdown(n=n);
       }
-      nuts();
+      union(){
+        nuts();
+        cutoff();
+      }
     }
+    *color("red",0.5 ) bearing();
+    *color("blue",0.5) rod();
   }
 
   module cover(n=6){
@@ -91,6 +98,17 @@ module bearing_holder(){
       translate(d2) nut();
     }
 
+    translate((d1+d2)/2)
+    ty(radius+base)
+    mirror(J)
+    nut();
+
+    mirror(I)
+    translate((d1+d2)/2)
+    ty(radius+base)
+    mirror(J)
+    nut();
+
     module nut(){
       ry(30)
       rx(-90)
@@ -103,7 +121,12 @@ module bearing_holder(){
         center=true,$fn=100);
     }
   }
-
+  
+  module cutoff(){
+    size = (75/100)*[bearing_diameter,100,bearing_length];
+    tz(bearing_length/2)
+    cblock(size,center=1);
+  }
 }
 module bearing_holder_old(){
 
