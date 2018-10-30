@@ -3,6 +3,7 @@ include <utils.scad>
 
 include <bearing-holder.scad>
 
+rx(-90)
 bearing_holder();
 
 

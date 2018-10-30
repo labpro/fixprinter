@@ -1,35 +1,22 @@
 module bearing_holder(){
 
   // Major Definitions      {
-  bearing_length   = 25;
+  bearing_length   = 50;
   bearing_diameter = 16;
   rod_diameter     = 8;
   radius         = bearing_diameter/2;
   base           = 2;
   gap            = 6;
-  cover          = 4;
+  cover          = 2;
   width          = 2*gap+bearing_diameter;
   height         = radius+base;
+  echo(width);
   // }
   // Nut Definitions        {
   nut_offset  = cover;
-  nut_apothem = (110/100)*5.2/2;
-  nut_inner_d = 1.5;   
+  nut_apothem = (105/100)*5.2/2;
+  nut_inner_d = (105/100)*2.7;   
   // }
-  // Screw Definitions      {
-  screw_type   = "conic";    
-  screw_head_d = 4;          
-  screw_head_h = 4;          
-  screw_body_d = 4;          
-  screw_body_h = 4;          
-                             
-  screw_values = [           
-      screw_head_d,          
-      screw_head_h,          
-      screw_body_d,          
-      screw_body_h           
-    ];                       
-  // }                       
 
   holder();
 
@@ -37,22 +24,19 @@ module bearing_holder(){
     //color("yellow",0.15)
     difference(){
       union(){
-        n = 100;
+        n = 250;
         shape(r=radius,n=n);
         coverup(n=n);
         coverdown(n=n);
       }
-      union(){
-        nuts();
-        cutoff();
-      }
+      holes();
     }
-    *color("red",0.5 ) bearing();
-    *color("blue",0.5) rod();
+    color("red",0.5 ) bearing();
+    color("blue",0.5) rod();
   }
 
   module cover(n=6){
-    apothem = (115/100)*rod_diameter/2;
+    apothem = (135/100)*rod_diameter/2;
     shape(r=apothem,h=cover,n=n);
   }
   module coverup(n=6){
@@ -84,32 +68,31 @@ module bearing_holder(){
     cylinder(r=rod_diameter/2,h=10*bearing_length,center=true,$fn=250);
   }
 
-  module nuts(){
+  module holes(){
     r = RadiusGivenApothem(nut_apothem,6);
     n = 50;
 
-    d1 = (radius+gap/2)*I+r*K;
-    d2 = (radius+gap/2)*I+(bearing_length-r)*K;
+    d1 = +(radius+gap/2)*I+r*K;
+    d2 = +(radius+gap/2)*I+(bearing_length-r)*K;
+    d3 = -(radius+gap/2)*I+r*K;
+    d4 = -(radius+gap/2)*I+(bearing_length-r)*K;
+
+    m1 = (d1+d2)/2;
+    m2 = (d3+d4)/2;
     
-    translate(d1) nut();
-    translate(d2) nut();
-    mirror(I){
-      translate(d1) nut();
-      translate(d2) nut();
-    }
+    translate(d1) nut1();
+    translate(d2) nut1();
+    translate(d3) nut1();
+    translate(d4) nut1();
 
-    translate((d1+d2)/2)
-    ty(radius+base)
-    mirror(J)
-    nut();
+    translate((d1+m1)/2) nut2();
+    translate((d3+m2)/2) nut2();
+    translate((d2+m1)/2) nut2();
+    translate((d4+m2)/2) nut2();
 
-    mirror(I)
-    translate((d1+d2)/2)
-    ty(radius+base)
-    mirror(J)
-    nut();
+    cutoff2();
 
-    module nut(){
+    module nut1(){
       ry(30)
       rx(-90)
       cylinder(r=r,h=radius,$fn=6);
@@ -120,13 +103,26 @@ module bearing_holder(){
         h=10*radius,
         center=true,$fn=100);
     }
+
+    module nut2(){
+      ty(radius+base)
+      mirror(J) nut1();
+    }
+
+    module cutoff(){
+      size = (50/100)*[bearing_diameter,100,bearing_length];
+      translate((d1+d4)/2)
+      cblock(size,center=1);
+    }
+    module cutoff2(){
+      size = [bearing_diameter/2,100,bearing_length/4];
+      translate((d3+m1)/2)
+      cblock(size,center=1);
+      translate((d2+m2)/2)
+      cblock(size,center=1);
+    }
   }
   
-  module cutoff(){
-    size = (75/100)*[bearing_diameter,100,bearing_length];
-    tz(bearing_length/2)
-    cblock(size,center=1);
-  }
 }
 module bearing_holder_old(){
 
