@@ -1,0 +1,48 @@
+{ 'name' : 'SCAD',
+  'last' : '0',
+  'tl'   : [ 
+  { 'name' : 'Main',
+    'last' : '0',
+    'bl'   : [ 
+  
+      { 'name':'Main',
+      'path':'scad/main.scad'
+      },
+      { 'name':'Utils',
+      'path':'scad/utils.scad'
+      },
+      { 'name':'Terminal',
+      'type':'term',
+      },
+  
+    ]
+    
+  },
+  { 'name' : 'Modules',
+    'last' : '0',
+    'bl'   : [ 
+  
+      { 'name':'Bearing',
+      'path':'scad/bearing.scad'
+      },
+      { 'name':'Bearing Holder',
+      'path':'scad/bearing-holder.scad'
+      },
+      { 'name':'Screw',
+      'path':'scad/screw.scad'
+      },
+      { 'name':'X-Cart',
+      'path':'scad/x-cart.scad'
+      },
+      { 'name':'Bed-Cart',
+      'path':'scad/bed-cart.scad'
+      },
+      { 'name':'Socket',
+      'path':'scad/socket.scad'
+      },
+  
+    ]
+    
+  },
+]
+}
