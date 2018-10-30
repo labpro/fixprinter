@@ -1,41 +1,9 @@
 
-I = [1,0,0];
-J = [0,1,0];
-K = [0,0,1];
+include <utils.scad>
 
-i = [1,0];
-j = [0,1];
+include <bearing-holder.scad>
 
-x = 10;
-y = 5;
-z = 3;
-
-size = [x,y,z];
-
-
-ab = 3;
-bc = 6;
-cd = 3;
-de = 7;
-ef = ab+cd;
-af = bc+de;
-
-
-A = [-af,0];
-B = A + ab*j;
-C = B + bc*i;
-D = C + cd*j;
-E = D + de*i;
-F = A + af*i;
-
-P = [A,B,C,D,E,F];
-
-mirror(I) linear_extrude(3) polygon(P);
-
-linear_extrude(3) polygon(P);
-
-
-
+bearing_holder();
 
 
 
