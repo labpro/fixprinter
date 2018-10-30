@@ -1,9 +1,116 @@
 module bearing_holder(){
 
   // Major Definitions      {
+  bearing_length   = 25;
+  bearing_diameter = 16;
+  rod_diameter     = 8;
+  radius         = bearing_diameter/2;
+  base           = 2;
+  gap            = 6;
+  cover          = 4;
+  width          = 2*gap+bearing_diameter;
+  height         = radius+base;
+  // }
+  // Nut Definitions        {
+  nut_offset  = cover;
+  nut_apothem = (110/100)*5.2/2;
+  nut_inner_d = 1.5;   
+  // }
+  // Screw Definitions      {
+  screw_type   = "conic";    
+  screw_head_d = 4;          
+  screw_head_h = 4;          
+  screw_body_d = 4;          
+  screw_body_h = 4;          
+                             
+  screw_values = [           
+      screw_head_d,          
+      screw_head_h,          
+      screw_body_d,          
+      screw_body_h           
+    ];                       
+  // }                       
+
+  holder();
+
+  module holder(){
+    difference(){
+      union(){
+        shape(r=radius,n=6);
+        coverup();
+        coverdown();
+      }
+      nuts();
+    }
+  }
+
+  module cover(n=6){
+    apothem = (115/100)*rod_diameter/2;
+    shape(r=apothem,h=cover,n=n);
+  }
+  module coverup(n=6){
+    tz(bearing_length)
+    cover(n);
+
+  }
+  module coverdown(n=6){
+    tz(-cover)
+    cover(n);
+
+  }
+
+  module shape(h=bearing_length,r,n=6){
+    size = width*I+height*J+h*K;
+    apothem = r;
+    r = RadiusGivenApothem(apothem,n);
+
+    difference(){
+      cblock(size);
+      cylinder(r=r,h=h,$fn=n);
+    }
+  }
+
+  module bearing(){
+    cylinder(r=radius,h=bearing_length,$fn=250);
+  }
+  module rod(){
+    cylinder(r=rod_diameter/2,h=10*bearing_length,center=true,$fn=250);
+  }
+
+  module nuts(){
+    r = RadiusGivenApothem(nut_apothem,6);
+    n = 50;
+
+    d1 = (radius+gap/2)*I+r*K;
+    d2 = (radius+gap/2)*I+(bearing_length-r)*K;
+    
+    translate(d1) nut();
+    translate(d2) nut();
+    mirror(I){
+      translate(d1) nut();
+      translate(d2) nut();
+    }
+
+    module nut(){
+      ry(30)
+      rx(-90)
+      cylinder(r=r,h=radius,$fn=6);
+
+      rx(-90)
+      cylinder(
+        r=nut_inner_d/2,
+        h=10*radius,
+        center=true,$fn=100);
+    }
+  }
+
+}
+module bearing_holder_old(){
+
+  // Major Definitions      {
   length      = 25;
-  diameter    = 16;
-  radius      = diameter/2;
+  bearing_diameter    = 16;
+  radius      = bearing_diameter/2;
   base_h      = 3;
   gap_x       = 3;
   clamp_t     = 4;
