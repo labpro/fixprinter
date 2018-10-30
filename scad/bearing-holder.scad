@@ -1,7 +1,8 @@
 module bearing_holder(){
 
   // Major Definitions      {
-  bearing_length   = 50;
+  bearing_quantity = 2;
+  bearing_length   = bearing_quantity*25;
   bearing_diameter = 16;
   rod_diameter     = 8;
   radius         = bearing_diameter/2;
@@ -80,17 +81,29 @@ module bearing_holder(){
     m1 = (d1+d2)/2;
     m2 = (d3+d4)/2;
     
-    translate(d1) nut1();
-    translate(d2) nut1();
-    translate(d3) nut1();
-    translate(d4) nut1();
+    if(bearing_quantity == 2){
+      translate(d1) nut1();
+      translate(d2) nut1();
+      translate(d3) nut1();
+      translate(d4) nut1();
 
-    translate((d1+m1)/2) nut2();
-    translate((d3+m2)/2) nut2();
-    translate((d2+m1)/2) nut2();
-    translate((d4+m2)/2) nut2();
+      translate((d1+m1)/2) nut2();
+      translate((d3+m2)/2) nut2();
+      translate((d2+m1)/2) nut2();
+      translate((d4+m2)/2) nut2();
 
-    cutoff2();
+      cutoff2();
+    }
+    else if(bearing_quantity == 1){
+      translate(d1) nut1();
+      translate(d2) nut1();
+      translate(d3) nut1();
+      translate(d4) nut1();
+
+      translate(m1) nut2();
+      translate(m2) nut2();
+      cutoff();
+    }
 
     module nut1(){
       ry(30)
