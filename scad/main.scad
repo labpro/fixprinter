@@ -10,6 +10,18 @@ bearing_holder();
 
 xcart();
 
+module calibration(){
+  a = 25;
+  b = 10;
+  
+  s1 = a*I+b*JK;
+  s2 = a*J+b*IK;
+  s3 = a*K+b*IJ;
+  
+  cube(s1);
+  cube(s2);
+  cube(s3);
+}
 
 
 

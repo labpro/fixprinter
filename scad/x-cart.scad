@@ -2,7 +2,7 @@
 
 module xcart(){
 
-  thickness      = 7;
+  thickness      = 5;
   gap            = 6;
   cover          = 2;
   nut_apothem = (116/100)*5.2/2;
@@ -11,6 +11,7 @@ module xcart(){
   bearing_diameter = 16;
   bearing_radius   = bearing_diameter/2;
 
+  mirror(K)
   difference(){
     base_shape();
     union(){
@@ -53,18 +54,17 @@ module xcart(){
 
     
   }
-  module c(h=thickness,inverted=0){
+  module c(head_d=5,h=thickness,inverted=0,type="squared"){
     
-    head_d = 5;
     head_h = 3;
     body_d = nut_inner_d/2;
     body_h = thickness-head_h;
 
     if(inverted == 1){
-     screw("squared",[body_d,body_h,head_d,head_h],$fn=10); 
+     screw(type,[body_d,body_h,head_d,head_h],$fn=30); 
     }
     else{
-     screw("squared",[head_d,head_h,body_d,body_h],$fn=10); 
+     screw(type,[head_d,head_h,body_d,body_h],$fn=30); 
     }
 
     
@@ -79,9 +79,9 @@ module xcart(){
     
   }
   module middle_holes(){
-
-    tx(+24) c();
-    tx(-24) c();
+    head_d = RadiusGivenApothem(8/2,6);
+    tx(+24) c(head_d=head_d,type="hexagon");
+    tx(-24) c(head_d=head_d,type="hexagon");
     
   }
   module belt_holes(){

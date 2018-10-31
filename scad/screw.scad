@@ -13,6 +13,11 @@ module screw(head="conic",values=[3,5,1,5]){
     cylinder(r=head_d/2,h=head_h);
     cylinder(r=body_d/2,h=body_h);
   }
+  else if(head == "hexagon"){
+    translate([0,0,body_h])
+    cylinder(r=head_d/2,h=head_h,$fn=6);
+    cylinder(r=body_d/2,h=body_h);
+  }
   else
   {
     translate([0,0,body_h])
