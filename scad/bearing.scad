@@ -1,36 +1,48 @@
 
 module bearing(){
   
-  dout  = 16;
-  h     = 25;
-  din   = 8;
-  carve = 1.5;
+  bearing_diameter = (100/100)*16;
+  bearing_length   = 25;
 
-  n = 4;
+  shaft_diameter = 8;
+  shaft_length   = 2*bearing_length;
+  
+  groove_length = (300/1000)*shaft_diameter;
+  groove_n      = 3;
 
-  $fn = 250;
+  $fn = 500;
 
   difference(){
+    shape();
+    holes();
+  }
 
-    
-    d = (101/100)*dout;
-    cylinder(r=d/2,h=h);
-    
-    union(){
-      rin = (102.95/100)*din/2;
+  module shape(){
+    r = bearing_diameter/2;
+    h = bearing_length;
+    cylinder(r=r,h=h);
+  }
+  module holes(){
+    shaft();
+    groove();
 
-
-
-      cylinder(r=rin,h);
+    module shaft(){
+      r = shaft_diameter/2;
+      h = shaft_length;
+      cylinder(r=r,h=h);
+    }
+    module groove(){
+      n = groove_n;
+      r = shaft_diameter/2+groove_length;
+      h = shaft_length;
 
       for(i = [0:2:2*n-2])
       {              
         angle=180/n;
         rz(i*angle)
-        sector(rin+carve,angle,h,5);
+        sector(r,angle,h,$fn);
       }
     }
-
   }
 
 

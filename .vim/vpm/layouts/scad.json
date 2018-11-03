@@ -43,19 +43,8 @@
       { 'name':'Socket',
       'path':'scad/socket.scad'
       },
-  
-    ]
-    
-  },
-  { 'name' : 'Temp',
-    'last' : '0',
-    'bl'   : [ 
-  
-      { 'name':'Bearing Holder',
-      'path':'scad/bearing-holder.scad'
-      },
-      { 'name':'X-Cart',
-      'path':'scad/x-cart.scad'
+      { 'name':'calibration',
+      'path':'scad/calibration.scad'
       },
   
     ]
