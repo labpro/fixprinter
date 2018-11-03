@@ -22,6 +22,9 @@
     'last' : '0',
     'bl'   : [ 
   
+      { 'name':'Rod-Bearing',
+      'path':'scad/rod-bearing.scad'
+      },
       { 'name':'Bearing',
       'path':'scad/bearing.scad'
       },

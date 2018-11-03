@@ -1,12 +1,9 @@
 
-
-module bearing_holder(){
-
   // Major Definitions      {
   bearing_quantity = 2;
   bearing_length   = bearing_quantity*25;
-  bearing_diameter = 16;
   rod_diameter     = 8;
+  bearing_diameter = 16;
   bearing_radius   = bearing_diameter/2;
   base           = 2;
   gap            = 6;
@@ -17,11 +14,59 @@ module bearing_holder(){
   // }
   // Nut Definitions        {
   nut_apothem = (116/100)*5.2/2;
-  nut_inner_d = (105/100)*2.7;   
+  nut_inner_d = (150/100)*2.7;   
   nut_radius  = RadiusGivenApothem(nut_apothem,6);
   // }
 
+module bearing_holder_clip(){
+
+  base  = 3;
+  thick = 12;
+  height = bearing_radius+base;
+  n = 6;
+  r = RadiusGivenApothem(bearing_radius,n);
+
+  size = width*I+height*J+thick*K;
+
+  difference(){
+    shape();
+    holes($fn=100);
+  }
+  module shape(){
+    difference(){
+      cblock(size);
+      rz(30)
+      cylinder(r=r,h=thick,$fn=n);
+    }
+  }
+  module holes(){
+    d1 = 3.7;
+    d2 = 6;
+    
+    screw();
+    mirror(I)
+    screw();
+    module screw(){
+      tz(thick/2)
+      tx((width-gap)/2)
+      rx(-90)
+      cylinder(r=d1/2,h=100);
+
+      tz(thick/2)
+      ty(6)
+      tx((width-gap)/2)
+      rx(-90)
+      cylinder(r=d2/2,h=100);
+    }
+  }
+
+
+}
+module bearing_holder(){
+
+
   holder();
+  *bearing();
 
   module holder(){
     //color("yellow",0.15)
@@ -131,7 +176,7 @@ module bearing_holder(){
       cblock(size,center=1);
     }
     module cutoff2(){
-      size = [bearing_diameter/2,100,bearing_length/4];
+      size = [bearing_diameter/1.5,100,bearing_length/3.5];
       translate((d3+m1)/2)
       cblock(size,center=1);
       translate((d2+m2)/2)
